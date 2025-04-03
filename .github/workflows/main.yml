@@ -20,7 +20,7 @@ jobs:
                   cd ejercicioTrackDevops1/ejercicioTrackDevops1-main
                   pip install -r requirements.txt
 
-          - name: Ejecutar pruebas
+          - name: Ejecutar pruebass
             run: |
                   cd ejercicioTrackDevops1/ejercicioTrackDevops1-main
                   python manage.py test
