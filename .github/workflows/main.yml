@@ -35,11 +35,7 @@ jobs:
                     script: |
                       mkdir -p /home/ubuntu/ejercicio
 
-          - name: add ssh key
-            run: |
-              mkdir -p ~/.ssh
-              echo ${{ secrets.PRIVATE_KEY }} >> ~/.ssh/id_rsa
-              chmod 600 ~/.ssh/id_rsa
+         
             
           - name: deploy files to server with rsync
             uses: burnett01/rsync-deployments@7.0.2
