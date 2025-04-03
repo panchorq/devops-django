@@ -25,15 +25,48 @@ jobs:
                   cd ejercicioTrackDevops1/ejercicioTrackDevops1-main
                   python manage.py test
 
-                  - name: executing remote ssh commands using password
-                  uses: appleboy/ssh-action@v1
-                  with:
+          - name: executing remote ssh commands using password
+            uses: appleboy/ssh-action@v1
+            with:
                     host: ${{ secrets.HOST }}
                     username: ${{ secrets.USERNAME }}
                     key: ${{ secrets.PRIVATE_KEY }}
                     port: ${{ secrets.PORT }}
                     script: |
                       mkdir -p /home/ubuntu/ejercicio
+
+          - name: add ssh key
+            run: |
+              mkdir -p ~/.ssh
+              echo ${{ secrets.PRIVATE_KEY }} >> ~/.ssh/id_rsa
+              chmod 600 ~/.ssh/id_rsa
+            
+          - name: deploy files to server with rsync
+            uses: burnett01/rsync-deployments@7.0.2
+            with:
+                switches: "-avzr --delete"
+                path: "./"
+                remote_path: "/home/ubuntu/ejercicio/"
+                remote_host: ${{ secrets.HOST }}
+                remote_user: ${{ secrets.USERNAME }}
+                remote_key: ${{ secrets.PRIVATE_KEY }}
+
+          - name: instalar dependencias en servidor remoto
+            uses: appleboy/ssh-action@v1
+            with:
+                host: ${{ secrets.HOST }}
+                username: ${{ secrets.USERNAME }}
+                key: ${{ secrets.PRIVATE_KEY }}
+                port: ${{ secrets.PORT }}
+                script: |
+                  cd /home/ubuntu/test/
+                  sudo apt install python3.12-venv -y
+                  python3.12 -m venv venv
+                  source venv/bin/activate
+                  pip3 install -r requirements.txt
+                  nohup python3 manage.py runserver 0.0.0.0:8000 --noreload > /dev/null 2>&1 &
+                  exit 0
+
 
 
          
