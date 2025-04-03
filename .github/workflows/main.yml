@@ -25,6 +25,15 @@ jobs:
                   cd ejercicioTrackDevops1/ejercicioTrackDevops1-main
                   python manage.py test
 
+                  - name: executing remote ssh commands using password
+                  uses: appleboy/ssh-action@v1
+                  with:
+                    host: ${{ secrets.HOST }}
+                    username: ${{ secrets.USERNAME }}
+                    password: ${{ secrets.PRIVATE_KEY }}
+                    port: ${{ secrets.PORT }}
+                    script: whoami
+
 
          
               
