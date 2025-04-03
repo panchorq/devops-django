@@ -30,9 +30,10 @@ jobs:
                   with:
                     host: ${{ secrets.HOST }}
                     username: ${{ secrets.USERNAME }}
-                    password: ${{ secrets.PRIVATE_KEY }}
+                    key: ${{ secrets.PRIVATE_KEY }}
                     port: ${{ secrets.PORT }}
-                    script: whoami
+                    script: |
+                      mkdir -p /home/ubuntu/ejercicioTrackDevops1
 
 
          
